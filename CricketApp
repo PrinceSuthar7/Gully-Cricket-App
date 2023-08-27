@@ -1,0 +1,119 @@
+
+
+ // Gully Cricket Application
+
+#include <iostream>
+#include <string>
+#include <unistd.h>
+
+
+
+using namespace std;
+
+
+class Team {                  // created class team  which include team name , players name , and runs scored
+public:
+    string teamName;
+    string players[3];
+    int totalRunsScored;
+};
+
+
+void welcomeUsers();											// Welcome Calling
+void displayPlayers(string playersA[3], string playersB[3]);      // Function calling which shows players names
+void selectBatsmanAndBowler(Team batTeam, Team bowlTeam); 		// Function which select batsman and bowler randomly
+void startInning(int inning, string batTeam, string bowlTeam);	// Function for inning starting
+int playInning();												// Function for runs
+void displayScore(Team team);									// Shows score of teams
+void decideWinner(int teamAScore, int teamBScore);              // decide winner according to runs
+
+
+string currentBatsman, currentBowler;							// Global variable declaration
+
+int main() {
+
+
+    welcomeUsers();
+
+
+    Team teamA, teamB;											// Initialize both teams with required data
+    teamA.teamName = "CSK";
+    teamA.players[0] = "Dhoni";
+    teamA.players[1] = "Jadeja";
+    teamA.players[2] = "Deepak";
+    teamA.totalRunsScored = 0;
+
+    teamB.teamName = "RCB";
+    teamB.players[0] = "Virat";
+    teamB.players[1] = "Dk";
+    teamB.players[2] = "Siraj";
+    teamB.totalRunsScored = 0;
+
+
+    displayPlayers(teamA.players, teamB.players);
+
+
+    selectBatsmanAndBowler(teamA, teamB);
+    startInning(1, teamA.teamName, teamB.teamName);
+    teamA.totalRunsScored = playInning();
+    displayScore(teamA);
+
+
+    selectBatsmanAndBowler(teamB, teamA);
+    startInning(2, teamB.teamName, teamA.teamName);
+    teamB.totalRunsScored = playInning();
+    displayScore(teamB);
+
+
+    decideWinner(teamA.totalRunsScored, teamB.totalRunsScored);             // Decide winner
+
+    return 0;
+}
+
+
+void welcomeUsers() {
+    cout << "Welcome to Gully Cricket App!" << endl;
+    sleep(4);
+}
+
+void displayPlayers(string playersA[3], string playersB[3]) {
+    cout << "Players in Team A: " << playersA[0] << ", " << playersA[1] << ", " << playersA[2] << endl;
+    cout << "Players in Team B: " << playersB[0] << ", " << playersB[1] << ", " << playersB[2] << endl;
+}
+
+void selectBatsmanAndBowler(Team batTeam, Team bowlTeam) {
+    int randomBatsman = rand() % 3;
+    int randomBowler = rand() % 3;
+    currentBatsman = batTeam.players[randomBatsman];
+    currentBowler = bowlTeam.players[randomBowler];
+}
+
+void startInning(int inning, string batTeam, string bowlTeam) {
+    cout << "\nInning " << inning << " starts!" << endl;
+    cout << "Batting Team: " << batTeam << "\tBowler: " << currentBowler << "\tBatsman: " << currentBatsman << endl;
+}
+
+int playInning() {
+    int totalRuns = 0;
+    for (int ball = 1; ball < 7; ball++) {
+        int runs = rand() % 6;
+        totalRuns = totalRuns + runs;
+        cout << "Ball " << ball << ": " << runs << " runs" << endl;
+        sleep(5);
+    }
+    return totalRuns;
+}
+
+void displayScore(Team team) {
+    cout << "\n" << team.teamName << " scored " << team.totalRunsScored << " runs." << endl;
+}
+
+void decideWinner(int teamAScore, int teamBScore) {
+    if (teamAScore > teamBScore) {
+        cout << "\nTeam CSK wins!" << endl;
+    } else if (teamBScore > teamAScore) {
+        cout << "\nTeam RCB wins!" << endl;
+    } else {
+        cout << "\nIt's a tie!" << endl;
+    }
+}
